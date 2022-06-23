@@ -4,9 +4,9 @@ import java.util.*;
 
 public class ThreeAverages implements RatingAnalyzer{
 
-    private List<Integer> ratings = new ArrayList<>();
+    private int[] ratings = {};
 
-    public ThreeAverages(ArrayList<Integer> ratings) {
+    public ThreeAverages(int[] ratings) {
         setRatings(ratings);
     }
 
@@ -18,72 +18,69 @@ public class ThreeAverages implements RatingAnalyzer{
             meanCalc += rating;
         }
 
-        meanCalc = meanCalc/ratings.size();
-
-        return meanCalc;
-    }
-
-    //TODO do you need this?
-    @Override
-    public double mean(ArrayList<Integer> ratings){
-        double meanCalc = 0;
-
-        for(Integer rating : ratings){
-            meanCalc += rating;
-        }
-        meanCalc = meanCalc/ratings.size();
+        meanCalc = meanCalc/ratings.length;
 
         return meanCalc;
     }
 
     @Override
     public double median() {
-        //TODO modify this so it's more succinct
-        ratings.sort(Comparator.comparingInt(r -> r));
+        Arrays.sort(ratings);
 
         double medianCalc;
-        int midIndex = Math.round(ratings.size()/2);
+        int midIndex = Math.round((int)(ratings.length / 2d));
         int midIndexLower = midIndex - 1;
-        ArrayList<Integer> meanCalc = new ArrayList<>();
 
-        if(ratings.size() % 2 != 0){
-            medianCalc = ratings.get(midIndex);
+        if(ratings.length % 2 != 0){
+            medianCalc = ratings[midIndex];
         }else{
-            meanCalc.add(ratings.get(midIndex));
-            meanCalc.add(ratings.get(midIndexLower));
-            medianCalc = mean(meanCalc);
+            medianCalc = (ratings[midIndex] + ratings[midIndexLower]) / 2d;
         }
 
         return medianCalc;
     }
 
     @Override
-    public int mode() {
-        //TODO find the values in the data set that occur most frequently
-        //TODO put the data in order least to greatest
-        //TODO iterate over the list and create a new list of duplicated data
-        //TODO if list is > 0 repeat until only a single value remains
-        //TODO return value
+    public int[] mode() {
+
+        //TODO try to make some of the logic compartmentalized in methods OR inner classes
+        List<Integer> modeReturn = new ArrayList<>();
+        int moderReturnIndex = 0;
+
         Map<Integer, Integer> modeMap = new HashMap<>();
-        int countValue = 1;
+        int keyCount = 1;
+        int maxCountValue = 0;
+
         for(Integer rating: ratings){
-            if(modeMap.get(rating) != null){
-                modeMap.put(rating, countValue);
+            if(modeMap.get(rating) == null){
+                modeMap.put(rating, keyCount);
             }else
             {
                 int newCount = modeMap.get(rating) + 1;
                 modeMap.put(rating, newCount);
+                if(maxCountValue < newCount){
+                    maxCountValue = newCount;
+                }
             }
         }
-        return 0;
+
+        for (Map.Entry<Integer, Integer> entry: modeMap.entrySet()){
+            if(maxCountValue > 1 && entry.getValue() == maxCountValue){
+                modeReturn.add(entry.getKey());
+            }
+        }
+
+        modeReturn.sort(Comparator.comparingInt(r -> r));
+        return modeReturn.stream().mapToInt(i -> i).toArray();
     }
 
-    public List<Integer> getRatings() {
+
+    public int[] getRatings() {
         return ratings;
     }
 
-    public void setRatings(ArrayList<Integer> ratings) {
-        if(!ratings.isEmpty()){
+    public void setRatings(int[] ratings) {
+        if(ratings.length > 0){
             this.ratings = ratings;
         }else{
             throw new IllegalArgumentException("ratings array cannot be null or empty");
