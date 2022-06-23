@@ -1,11 +1,16 @@
 package org.stats;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class RatingAnalyzerTest {
+
+    @Test
+    void newInstance_invalid() {
+        assertThrows(AnalyzerConfigurationException.class, () -> RatingAnalyzer.newInstance(null));
+    }
 
     @Test
     void mean() {
@@ -71,11 +76,5 @@ class RatingAnalyzerTest {
     }
 
     //TODO test the valid instantiation of the class vs. the invalid instantiation of the class
-    @Test
-    void newInstance_valid() {
-    }
 
-    @Test
-    void newInstance_invalid() {
-    }
 }

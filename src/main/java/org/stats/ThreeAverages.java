@@ -2,7 +2,7 @@ package org.stats;
 
 import java.util.*;
 
-public class ThreeAverages implements RatingAnalyzer{
+public class ThreeAverages implements RatingAnalyzer {
 
     private int[] ratings = {};
 
@@ -14,11 +14,11 @@ public class ThreeAverages implements RatingAnalyzer{
     public double mean() {
         double meanCalc = 0;
 
-        for(Integer rating : ratings){
+        for (Integer rating : ratings) {
             meanCalc += rating;
         }
 
-        meanCalc = meanCalc/ratings.length;
+        meanCalc = meanCalc / ratings.length;
 
         return meanCalc;
     }
@@ -28,12 +28,12 @@ public class ThreeAverages implements RatingAnalyzer{
         Arrays.sort(ratings);
 
         double medianCalc;
-        int midIndex = Math.round((int)(ratings.length / 2d));
+        int midIndex = Math.round((int) (ratings.length / 2d));
         int midIndexLower = midIndex - 1;
 
-        if(ratings.length % 2 != 0){
+        if (ratings.length % 2 != 0) {
             medianCalc = ratings[midIndex];
-        }else{
+        } else {
             medianCalc = (ratings[midIndex] + ratings[midIndexLower]) / 2d;
         }
 
@@ -42,18 +42,17 @@ public class ThreeAverages implements RatingAnalyzer{
 
     @Override
     public int[] mode() {
-
-        //TODO try to make some of the logic compartmentalized in methods OR inner classes
+        //TODO use arrays.sort(ratings) first before iterating, then you can remove the lambda
         List<Integer> modeReturn = new ArrayList<>();
         Map<Integer, Integer> modeMap = new HashMap<>();
 
         int keyCount = 1;
         int maxCountValue = 0;
 
-        for(Integer rating: ratings){
-            if(modeMap.get(rating) == null){
+        for (Integer rating : ratings) {
+            if (modeMap.get(rating) == null) {
                 modeMap.put(rating, keyCount);
-            }else{
+            } else {
                 int newCount = modeMap.get(rating) + 1;
                 modeMap.put(rating, newCount);
 
@@ -61,8 +60,8 @@ public class ThreeAverages implements RatingAnalyzer{
             }
         }
 
-        for (Map.Entry<Integer, Integer> entry: modeMap.entrySet()){
-            if(maxCountValue > 1 && entry.getValue() == maxCountValue){
+        for (Map.Entry<Integer, Integer> entry : modeMap.entrySet()) {
+            if (maxCountValue > 1 && entry.getValue() == maxCountValue) {
                 modeReturn.add(entry.getKey());
             }
         }
@@ -71,18 +70,16 @@ public class ThreeAverages implements RatingAnalyzer{
         return modeReturn.stream().mapToInt(i -> i).toArray();
     }
 
-
     public int[] getRatings() {
         return ratings;
     }
 
     public void setRatings(int[] ratings) {
-        if(ratings.length > 0){
+        if (ratings.length > 0) {
             this.ratings = ratings;
-        }else{
+        } else {
             throw new IllegalArgumentException("ratings array cannot be null or empty");
         }
     }
 
-    //TODO should I override the toString, equals, and hash methods?
 }
