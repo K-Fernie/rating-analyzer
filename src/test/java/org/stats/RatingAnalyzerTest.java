@@ -9,7 +9,7 @@ class RatingAnalyzerTest {
 
     @Test
     void mean() {
-        int[] ratings = {9, 10, 12, 13, 13, 13, 15, 15, 16, 16, 18, 22, 23, 24, 24, 25};
+        int[] ratings = {9, 18, 6, 5, 1, 27};
 
         RatingAnalyzer analyzer = RatingAnalyzer.newInstance(ratings);
         double meanVal = analyzer.mean();
@@ -18,13 +18,23 @@ class RatingAnalyzerTest {
     }
 
     @Test
-    void median() {
-        int[] ratings = {9, 10, 12, 13, 13, 13, 15, 15, 16, 16, 18, 22, 23, 24, 24, 25};
+    void median_evenDataset() {
+        int[] ratings = {9, 18, 6, 5, 1, 27};
 
         RatingAnalyzer analyzer = RatingAnalyzer.newInstance(ratings);
         double medianVal = analyzer.median();
 
-        assertEquals(15.5, medianVal, .0001);
+        assertEquals(7.5, medianVal, .0001);
+    }
+
+    @Test
+    void median_oddDataset() {
+        int[] ratings = {9, 18, 6, 5, 1, 27, 15};
+
+        RatingAnalyzer analyzer = RatingAnalyzer.newInstance(ratings);
+        double medianVal = analyzer.median();
+
+        assertEquals(9, medianVal, .0001);
     }
 
     @Test
@@ -45,6 +55,17 @@ class RatingAnalyzerTest {
         RatingAnalyzer analyzer = RatingAnalyzer.newInstance(ratings);
         int[] modeVal = analyzer.mode();
         int[] assertionVal = {13, 15, 16, 24};
+
+        assertArrayEquals(assertionVal, modeVal);
+    }
+
+    @Test
+    void mode_noModeReturn(){
+        int[] ratings = {1, 5, 6, 9, 15, 18, 27};
+
+        RatingAnalyzer analyzer = RatingAnalyzer.newInstance(ratings);
+        int[] modeVal = analyzer.mode();
+        int[] assertionVal = {};
 
         assertArrayEquals(assertionVal, modeVal);
     }

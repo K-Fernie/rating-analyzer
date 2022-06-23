@@ -45,22 +45,19 @@ public class ThreeAverages implements RatingAnalyzer{
 
         //TODO try to make some of the logic compartmentalized in methods OR inner classes
         List<Integer> modeReturn = new ArrayList<>();
-        int moderReturnIndex = 0;
-
         Map<Integer, Integer> modeMap = new HashMap<>();
+
         int keyCount = 1;
         int maxCountValue = 0;
 
         for(Integer rating: ratings){
             if(modeMap.get(rating) == null){
                 modeMap.put(rating, keyCount);
-            }else
-            {
+            }else{
                 int newCount = modeMap.get(rating) + 1;
                 modeMap.put(rating, newCount);
-                if(maxCountValue < newCount){
-                    maxCountValue = newCount;
-                }
+
+                maxCountValue = Math.max(maxCountValue, newCount);
             }
         }
 
@@ -70,7 +67,7 @@ public class ThreeAverages implements RatingAnalyzer{
             }
         }
 
-        modeReturn.sort(Comparator.comparingInt(r -> r));
+        modeReturn.sort(Comparator.comparingInt(int1 -> int1));
         return modeReturn.stream().mapToInt(i -> i).toArray();
     }
 
