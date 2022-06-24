@@ -35,10 +35,9 @@ public class ThreeAverages implements RatingAnalyzer {
     public int[] mode() {
 
         List<Long> modeReturn = new ArrayList<>();
-        Map<Integer, Long> modeMap = Arrays
-                .stream(ratings)
-                .boxed()
-                .collect(Collectors.groupingBy(Function.identity(),Collectors.counting()));
+
+        Map<Integer, Long> modeMap = Arrays.stream(ratings)
+                .boxed().collect(Collectors.groupingBy(Function.identity(),Collectors.counting()));
 
         int maxValueInMap = (Collections.max(modeMap.values())).intValue();
 
