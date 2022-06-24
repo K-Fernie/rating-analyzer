@@ -1,8 +1,11 @@
-package org.stats;
+package com.stats;
+
+import org.stats.RatingAnalyzer;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
 
 public class ThreeAverages implements RatingAnalyzer {
 
@@ -14,9 +17,7 @@ public class ThreeAverages implements RatingAnalyzer {
 
     @Override
     public double mean() {
-
         return (double) Arrays.stream(ratings).sum()/ratings.length;
-
     }
 
     @Override
@@ -33,31 +34,21 @@ public class ThreeAverages implements RatingAnalyzer {
     @Override
     public int[] mode() {
 
-        List<Integer> modeReturn = new ArrayList<>();
-        Map<Integer, Integer> modeMap = new HashMap<>();
+        List<Long> modeReturn = new ArrayList<>();
+        Map<Integer, Long> modeMap = Arrays
+                .stream(ratings)
+                .boxed()
+                .collect(Collectors.groupingBy(Function.identity(),Collectors.counting()));
 
-        int keyCount = 1;
-        int maxCountValue = 0;
+        int maxValueInMap = (Collections.max(modeMap.values())).intValue();
 
-
-        for (Integer rating : ratings) {
-            if (modeMap.get(rating) == null) {
-                modeMap.put(rating, keyCount);
-            } else {
-                int newCount = modeMap.get(rating) + 1;
-                modeMap.put(rating, newCount);
-
-                maxCountValue = Math.max(maxCountValue, newCount);
+        for (Map.Entry<Integer, Long> entry : modeMap.entrySet()) {
+            if (maxValueInMap > 1 && entry.getValue() == maxValueInMap) {
+                modeReturn.add(Long.valueOf(entry.getKey()));
             }
         }
 
-        for (Map.Entry<Integer, Integer> entry : modeMap.entrySet()) {
-            if (maxCountValue > 1 && entry.getValue() == maxCountValue) {
-                modeReturn.add(entry.getKey());
-            }
-        }
-
-        return modeReturn.stream().sorted(Comparator.comparingInt(int1 -> int1)).mapToInt(i -> i).toArray();
+        return modeReturn.stream().sorted(Comparator.comparingInt(Math::toIntExact)).mapToInt(Math::toIntExact).toArray();
     }
 
     public void setRatings(int[] ratings) {

@@ -1,6 +1,8 @@
-package org.stats;
+package com.stats;
 
 import org.junit.jupiter.api.Test;
+import org.stats.AnalyzerConfigurationException;
+import org.stats.RatingAnalyzer;
 
 
 import static org.junit.jupiter.api.Assertions.*;
