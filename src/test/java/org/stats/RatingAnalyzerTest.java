@@ -14,12 +14,12 @@ class RatingAnalyzerTest {
 
     @Test
     void mean() {
-        int[] ratings = {9, 18, 6, 5, 1, 27};
+        int[] ratings = {9, 5, 6, 1, 18};
 
         RatingAnalyzer analyzer = RatingAnalyzer.newInstance(ratings);
         double meanVal = analyzer.mean();
 
-        assertEquals(16.75, meanVal, .0001);
+        assertEquals(7.8, meanVal, .0001);
     }
 
     @Test
@@ -65,7 +65,7 @@ class RatingAnalyzerTest {
     }
 
     @Test
-    void mode_noModeReturn(){
+    void mode_noReturn(){
         int[] ratings = {1, 5, 6, 9, 15, 18, 27};
 
         RatingAnalyzer analyzer = RatingAnalyzer.newInstance(ratings);
@@ -75,6 +75,5 @@ class RatingAnalyzerTest {
         assertArrayEquals(assertionVal, modeVal);
     }
 
-    //TODO test the valid instantiation of the class vs. the invalid instantiation of the class
 
 }

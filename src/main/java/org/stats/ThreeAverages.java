@@ -1,6 +1,8 @@
 package org.stats;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class ThreeAverages implements RatingAnalyzer {
 
@@ -12,42 +14,31 @@ public class ThreeAverages implements RatingAnalyzer {
 
     @Override
     public double mean() {
-        double meanCalc = 0;
 
-        for (Integer rating : ratings) {
-            meanCalc += rating;
-        }
+        return (double) Arrays.stream(ratings).sum()/ratings.length;
 
-        meanCalc = meanCalc / ratings.length;
-
-        return meanCalc;
     }
 
     @Override
     public double median() {
         Arrays.sort(ratings);
 
-        double medianCalc;
         int midIndex = Math.round((int) (ratings.length / 2d));
         int midIndexLower = midIndex - 1;
 
-        if (ratings.length % 2 != 0) {
-            medianCalc = ratings[midIndex];
-        } else {
-            medianCalc = (ratings[midIndex] + ratings[midIndexLower]) / 2d;
-        }
-
-        return medianCalc;
+        return (ratings.length % 2 != 0) ?  ratings[midIndex] :
+                (ratings[midIndex] + ratings[midIndexLower]) / 2d;
     }
 
     @Override
     public int[] mode() {
-        //TODO use arrays.sort(ratings) first before iterating, then you can remove the lambda
+
         List<Integer> modeReturn = new ArrayList<>();
         Map<Integer, Integer> modeMap = new HashMap<>();
 
         int keyCount = 1;
         int maxCountValue = 0;
+
 
         for (Integer rating : ratings) {
             if (modeMap.get(rating) == null) {
@@ -66,15 +57,11 @@ public class ThreeAverages implements RatingAnalyzer {
             }
         }
 
-        modeReturn.sort(Comparator.comparingInt(int1 -> int1));
-        return modeReturn.stream().mapToInt(i -> i).toArray();
-    }
-
-    public int[] getRatings() {
-        return ratings;
+        return modeReturn.stream().sorted(Comparator.comparingInt(int1 -> int1)).mapToInt(i -> i).toArray();
     }
 
     public void setRatings(int[] ratings) {
+
         if (ratings.length > 0) {
             this.ratings = ratings;
         } else {
